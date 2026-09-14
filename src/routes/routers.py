@@ -3,6 +3,7 @@ import os
 from fastapi import APIRouter
 
 from src.llm.schema import QueryResponse, QueryRequest, VerdictEnum
+from src.services import services
 
 router = APIRouter()
 
@@ -20,7 +21,7 @@ async def health():
         "status": "ok"
     }
 
-@router.post("/check", response_model=QueryResponse)
+@router.post("/check")
 async def check_query(request: QueryRequest):
     if os.environ.get("LLM_STUB") == "1":
         return QueryResponse(
@@ -29,5 +30,5 @@ async def check_query(request: QueryRequest):
             confidence=0.95
         )
 
-
-    return None
+    raw_response = services.evaluate_query_risk(request.query)
+    return {"raw_model_output": raw_response}
