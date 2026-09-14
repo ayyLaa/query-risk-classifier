@@ -30,5 +30,4 @@ async def check_query(request: QueryRequest):
             confidence=0.95
         )
 
-    raw_response = services.evaluate_query_risk(request.query)
-    return {"raw_model_output": raw_response}
+    return services.evaluate_query_risk(request.query)
