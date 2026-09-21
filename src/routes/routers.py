@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from src.llm.schema import QueryResponse, QueryRequest, VerdictEnum
 from src.services import services
@@ -28,6 +28,11 @@ async def check_query(request: QueryRequest):
             verdict=VerdictEnum.safe,
             reason="Stub mode test: Query is safe.",
             confidence=0.95
+        )
+    if os.environ.get("LLM_ENABLED", "true").lower() == "false":
+        raise HTTPException(
+            status_code=503,
+            detail="LLM functionality is currently disabled by the administrator."
         )
 
     return services.evaluate_query_risk(request.query)
