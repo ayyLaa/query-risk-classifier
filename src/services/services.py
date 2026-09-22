@@ -56,7 +56,7 @@ def log_cost(prompt_version: str, model: str, input_tokens: int, output_tokens: 
         f.write(json.dumps(cost_entry) + "\n")
 
 def evaluate_query_risk(user_query: str):
-    prompt_version = "risk-classifier-v1"
+    prompt_version = "risk-classifier-v2"
 
     cache_key = f"{prompt_version}_{user_query}"
 
